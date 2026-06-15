@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Цветы с любовью</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #FFF5F0;
+            color: #2d2a28;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        header {
+            background: rgba(255, 245, 240, 0.95);
+            backdrop-filter: blur(8px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #f0dfd5;
+            padding: 15px 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 1.9rem;
+            font-weight: bold;
+            color: #D96B6B;
+        }
+
+        .logo::before {
+            content: "🌿";
+            margin-right: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #5a3e34;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #D96B6B;
+        }
+
+        .btn {
+            background: #D96B6B;
+            color: white;
+            padding: 12px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: 0.25s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #c15555;
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #FFF5F0 0%, #ffefe6 100%);
+        }
+
+        .hero-grid {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            color: #5a3e34;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: #7b5e52;
+            margin: 24px 0;
+        }
+
+        .hero-circle {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .circle-main {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(145deg, #FFEFE5, #FFE2D4);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 20px 30px rgba(100, 60, 40, 0.2);
+            border: 2px solid rgba(255,255,240,0.8);
+        }
+
+        .flower-icon {
+            font-size: 5rem;
+        }
+
+        .circle-text {
+            margin-top: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #D96B6B;
+        }
+
+        section {
+            padding: 80px 0;
+            border-bottom: 1px solid #f5e0d4;
+        }
+
+        .section-title {
+            font-size: 2.4rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #5a3e34;
+        }
+
+        .section-title span {
+            color: #D96B6B;
+        }
+
+        .cards-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .card {
+            flex: 1 1 250px;
+            background: white;
+            border-radius: 28px;
+            padding: 1.6rem;
+            text-align: center;
+            border: 1px solid #f0dfd4;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: #D96B6B;
+        }
+
+        .card-img {
+            font-size: 3.5rem;
+        }
+
+        .card h3 {
+            margin: 12px 0;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #D96B6B;
+            font-size: 1.3rem;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .feature {
+            flex: 1 1 200px;
+            text-align: center;
+            background: #fffaf7;
+            padding: 1.5rem;
+            border-radius: 32px;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+        }
+
+        .reviews-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .review {
+            background: #fffbf9;
+            border-radius: 28px;
+            padding: 1.5rem;
+            flex: 1 1 280px;
+            font-style: italic;
+        }
+
+        .delivery-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            background: #fffaf6;
+            border-radius: 36px;
+            padding: 2rem;
+        }
+
+        .contact-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .contacts-card, .order-card {
+            flex: 1;
+            background: #fffaf6;
+            border-radius: 36px;
+            padding: 2rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5cfc2;
+            border-radius: 60px;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background: #Fef3ec;
+            padding: 30px;
+            text-align: center;
+        }
+
+        @media (max-width: 800px) {
+            .hero-content h1 { font-size: 2rem; }
+            .circle-main { width: 220px; height: 220px; }
+            .flower-icon { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="navbar">
+            <div class="logo">Flowers</div>
+            <ul class="nav-links">
+                <li><a href="#catalog">Каталог</a></li>
+                <li><a href="#promo">Акции</a></li>
+                <li><a href="#delivery">Доставка</a></li>
+                <li><a href="#reviews">Отзывы</a></li>
+                <li><a href="#contacts">Контакты</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="container">
+        <div class="hero-grid">
+            <div class="hero-content">
+                <h1>Цветы с любовью</h1>
+                <p>Свежие букеты ручной сборки, бережная доставка и атмосфера нежности.</p>
+                <a href="#order-form" class="btn">Выбрать букет</a>
+            </div>
+            <div class="hero-circle">
+                <div class="circle-main">
+                    <div class="flower-icon">🌹✨</div>
+                    <div class="circle-text">свежие букеты</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="catalog">
+    <div class="container">
+        <h2 class="section-title"><span>Популярные</span> букеты</h2>
+        <div class="cards-grid">
+            <div class="card"><div class="card-img">🌸💐</div><h3>Нежность пионов</h3><div class="price">3 490 ₽</div><button class="btn" onclick="alert('Заказ добавлен! Перейдите в форму.')">Заказать</button></div>
+            <div class="card"><div class="card-img">🌹✨</div><h3>Алые розы</h3><div class="price">4 290 ₽</div><button class="btn" onclick="alert('Заказ добавлен!')">Заказать</button></div>
+            <div class="card"><div class="card-img">🌻🍊</div><h3>Солнечный сад</h3><div class="price">3 190 ₽</div><button class="btn" onclick="alert('Заказ добавлен!')">Заказать</button></div>
+        </div>
+    </div>
+</section>
+
+<section id="promo">
+    <div class="container">
+        <h2 class="section-title"><span>Акции</span> и подарки</h2>
+        <div class="cards-grid">
+            <div class="card"><div class="card-img">🎁✉️</div><h3>Открытка в подарок</h3><p>При заказе от 2500₽</p></div>
+            <div class="card"><div class="card-img">🌸💖</div><h3>Скидка на пионы</h3><p>3 490₽ → 2 790₽</p></div>
+        </div>
+    </div>
+</section>
+
+<section id="delivery">
+    <div class="container">
+        <h2 class="section-title"><span>Доставка</span> и оплата</h2>
+        <div class="delivery-wrapper">
+            <div><h3>📍 Зоны доставки</h3><p>Центр — 250₽, пригород — 450₽. Бесплатно от 3500₽.</p></div>
+            <div><h3>💳 Оплата</h3><p>Карта, наличные, СБП.</p></div>
+        </div>
+    </div>
+</section>
+
+<section id="reviews">
+    <div class="container">
+        <h2 class="section-title"><span>Отзывы</span></h2>
+        <div class="reviews-grid">
+            <div class="review">“Самые свежие розы! Доставили вовремя.” — Анастасия</div>
+            <div class="review">“Очень нежная упаковка, спасибо!” — Екатерина</div>
+        </div>
+    </div>
+</section>
+
+<section id="contacts">
+    <div class="container">
+        <h2 class="section-title"><span>Контакты</span> и заказ</h2>
+        <div class="contact-row">
+            <div class="contacts-card">
+                <p><strong>Flowers</strong></p>
+                <p>📍 Москва, ул. Цветочная, 12</p>
+                <p>📞 +7 (495) 123-45-67</p>
+            </div>
+            <div class="order-card" id="order-form">
+                <h3>Оформить заказ</h3>
+                <form onsubmit="alert('Спасибо! Мы свяжемся с вами.'); return false;">
+                    <input type="text" placeholder="Ваше имя" required>
+                    <input type="tel" placeholder="Телефон" required>
+                    <input type="date" required>
+                    <input type="time" required>
+                    <textarea rows="2" placeholder="Текст открытки"></textarea>
+                    <button type="submit" class="btn">Отправить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Flowers — Цветы с любовью</p>
+</footer>
+
+</body>
+</html>
