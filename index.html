@@ -257,6 +257,46 @@
             border: 1px solid #e5cfc2;
             border-radius: 60px;
             margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        /* Стили для ошибок */
+        .error-message {
+            color: #d32f2f;
+            font-size: 0.85rem;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+            display: none;
+            padding-left: 10px;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        input.error, textarea.error, select.error {
+            border-color: #d32f2f;
+            background-color: #fff5f5;
+        }
+
+        input.success, textarea.success, select.success {
+            border-color: #2e7d32;
+            background-color: #f1f8f1;
+        }
+
+        .success-message {
+            background: #e8f5e9;
+            color: #1e5a2a;
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-top: 15px;
+            display: none;
+            border-left: 4px solid #2e7d32;
+            font-weight: 500;
+        }
+
+        .success-message.show {
+            display: block;
         }
 
         footer {
@@ -359,14 +399,40 @@
             </div>
             <div class="order-card" id="order-form">
                 <h3>Оформить заказ</h3>
-                <form onsubmit="alert('Спасибо! Мы свяжемся с вами.'); return false;">
-                    <input type="text" placeholder="Ваше имя" required>
-                    <input type="tel" placeholder="Телефон" required>
-                    <input type="date" required>
-                    <input type="time" required>
-                    <textarea rows="2" placeholder="Текст открытки"></textarea>
-                    <button type="submit" class="btn">Отправить</button>
+                <form id="orderForm">
+                    <!-- Поле "Имя" -->
+                    <input type="text" id="userName" placeholder="Ваше имя" required>
+                    <div class="error-message" id="nameError">❌ Имя должно содержать только буквы и пробелы (от 2 до 30 символов)</div>
+
+                    <!-- Поле "Телефон" -->
+                    <input type="tel" id="userPhone" placeholder="Телефон (например: +7 999 123-45-67)" required>
+                    <div class="error-message" id="phoneError">❌ Введите корректный номер телефона (формат: +7 XXX XXX-XX-XX)</div>
+
+                    <!-- Поле "Дата" -->
+                    <input type="date" id="deliveryDate" required>
+                    <div class="error-message" id="dateError">❌ Пожалуйста, выберите дату доставки</div>
+
+                    <!-- Поле "Время" -->
+                    <input type="time" id="deliveryTime" required>
+                    <div class="error-message" id="timeError">❌ Пожалуйста, выберите время доставки</div>
+
+                    <!-- Поле "Текст открытки" -->
+                    <textarea id="cardText" rows="2" placeholder="Текст открытки (необязательно)"></textarea>
+
+                    <!-- Поле "Выбор букета" -->
+                    <select id="bouquetSelect">
+                        <option value="">Выберите букет</option>
+                        <option value="Нежность пионов - 3490 ₽">Нежность пионов - 3490 ₽</option>
+                        <option value="Алые розы - 4290 ₽">Алые розы - 4290 ₽</option>
+                        <option value="Солнечный сад - 3190 ₽">Солнечный сад - 3190 ₽</option>
+                    </select>
+                    <div class="error-message" id="bouquetError">❌ Пожалуйста, выберите букет из списка</div>
+
+                    <button type="submit" class="btn">Отправить заказ</button>
                 </form>
+                <div class="success-message" id="successMessage">
+                    ✅ Заказ успешно отправлен! Мы свяжемся с вами в ближайшее время.
+                </div>
             </div>
         </div>
     </div>
@@ -375,6 +441,194 @@
 <footer>
     <p>© 2026 Flowers — Цветы с любовью</p>
 </footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('orderForm');
+        
+        // Поля и их ошибки
+        const nameInput = document.getElementById('userName');
+        const phoneInput = document.getElementById('userPhone');
+        const dateInput = document.getElementById('deliveryDate');
+        const timeInput = document.getElementById('deliveryTime');
+        const bouquetSelect = document.getElementById('bouquetSelect');
+        
+        const nameError = document.getElementById('nameError');
+        const phoneError = document.getElementById('phoneError');
+        const dateError = document.getElementById('dateError');
+        const timeError = document.getElementById('timeError');
+        const bouquetError = document.getElementById('bouquetError');
+        const successMessage = document.getElementById('successMessage');
+
+        // Валидация имени
+        function validateName() {
+            const value = nameInput.value.trim();
+            const regex = /^[А-Яа-яA-Za-z\s]{2,30}$/;
+            if (!value) {
+                nameError.textContent = '❌ Имя обязательно для заполнения';
+                nameError.classList.add('show');
+                nameInput.classList.add('error');
+                nameInput.classList.remove('success');
+                return false;
+            } else if (!regex.test(value)) {
+                nameError.textContent = '❌ Имя должно содержать только буквы и пробелы (от 2 до 30 символов)';
+                nameError.classList.add('show');
+                nameInput.classList.add('error');
+                nameInput.classList.remove('success');
+                return false;
+            } else {
+                nameError.classList.remove('show');
+                nameInput.classList.remove('error');
+                nameInput.classList.add('success');
+                return true;
+            }
+        }
+
+        // Валидация телефона
+        function validatePhone() {
+            const value = phoneInput.value.trim();
+            // Поддерживаем форматы: +7 999 123-45-67, +79991234567, 8-999-123-45-67
+            const regex = /^(\+7|8)[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/;
+            if (!value) {
+                phoneError.textContent = '❌ Телефон обязателен для заполнения';
+                phoneError.classList.add('show');
+                phoneInput.classList.add('error');
+                phoneInput.classList.remove('success');
+                return false;
+            } else if (!regex.test(value.replace(/\s/g, ''))) {
+                phoneError.textContent = '❌ Введите корректный номер телефона (формат: +7 999 123-45-67)';
+                phoneError.classList.add('show');
+                phoneInput.classList.add('error');
+                phoneInput.classList.remove('success');
+                return false;
+            } else {
+                phoneError.classList.remove('show');
+                phoneInput.classList.remove('error');
+                phoneInput.classList.add('success');
+                return true;
+            }
+        }
+
+        // Валидация даты
+        function validateDate() {
+            const value = dateInput.value;
+            if (!value) {
+                dateError.classList.add('show');
+                dateInput.classList.add('error');
+                dateInput.classList.remove('success');
+                return false;
+            } else {
+                // Проверяем, что дата не в прошлом
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const selectedDate = new Date(value);
+                if (selectedDate < today) {
+                    dateError.textContent = '❌ Дата доставки не может быть в прошлом';
+                    dateError.classList.add('show');
+                    dateInput.classList.add('error');
+                    dateInput.classList.remove('success');
+                    return false;
+                }
+                dateError.classList.remove('show');
+                dateInput.classList.remove('error');
+                dateInput.classList.add('success');
+                return true;
+            }
+        }
+
+        // Валидация времени
+        function validateTime() {
+            const value = timeInput.value;
+            if (!value) {
+                timeError.classList.add('show');
+                timeInput.classList.add('error');
+                timeInput.classList.remove('success');
+                return false;
+            } else {
+                timeError.classList.remove('show');
+                timeInput.classList.remove('error');
+                timeInput.classList.add('success');
+                return true;
+            }
+        }
+
+        // Валидация выбора букета
+        function validateBouquet() {
+            const value = bouquetSelect.value;
+            if (!value) {
+                bouquetError.classList.add('show');
+                bouquetSelect.classList.add('error');
+                bouquetSelect.classList.remove('success');
+                return false;
+            } else {
+                bouquetError.classList.remove('show');
+                bouquetSelect.classList.remove('error');
+                bouquetSelect.classList.add('success');
+                return true;
+            }
+        }
+
+        // Добавляем обработчики на потерю фокуса (blur) для каждого поля
+        nameInput.addEventListener('blur', validateName);
+        phoneInput.addEventListener('blur', validatePhone);
+        dateInput.addEventListener('blur', validateDate);
+        timeInput.addEventListener('blur', validateTime);
+        bouquetSelect.addEventListener('change', validateBouquet);
+
+        // Обработка отправки формы
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Проверяем все поля
+            const isNameValid = validateName();
+            const isPhoneValid = validatePhone();
+            const isDateValid = validateDate();
+            const isTimeValid = validateTime();
+            const isBouquetValid = validateBouquet();
+
+            // Если все поля валидны
+            if (isNameValid && isPhoneValid && isDateValid && isTimeValid && isBouquetValid) {
+                // Собираем данные
+                const name = nameInput.value.trim();
+                const phone = phoneInput.value.trim();
+                const date = dateInput.value;
+                const time = timeInput.value;
+                const bouquet = bouquetSelect.value;
+                const cardText = document.getElementById('cardText').value.trim() || 'Без открытки';
+
+                // Показываем сообщение об успехе
+                successMessage.innerHTML = `
+                    ✅ Заказ успешно отправлен!<br>
+                    <span style="font-size: 0.9rem; color: #2d2a28;">
+                        👤 ${name} | 📞 ${phone} | 🌸 ${bouquet} | 📅 ${date} ⏰ ${time}<br>
+                        💌 Открытка: ${cardText}
+                    </span>
+                `;
+                successMessage.classList.add('show');
+
+                // Очищаем форму
+                form.reset();
+                
+                // Убираем классы успеха
+                document.querySelectorAll('.success').forEach(el => el.classList.remove('success'));
+
+                // Скрываем сообщение через 7 секунд
+                setTimeout(() => {
+                    successMessage.classList.remove('show');
+                }, 7000);
+
+                // Прокручиваем к сообщению
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                // Прокручиваем к первому полю с ошибкой
+                const firstError = document.querySelector('.error');
+                if (firstError) {
+                    firstError.focus();
+                }
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
